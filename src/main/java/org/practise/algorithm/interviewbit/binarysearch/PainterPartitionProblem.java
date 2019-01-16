@@ -31,18 +31,17 @@ Output : 50
 public class PainterPartitionProblem {
     private static final int MODULO = 10000003;
     public int paint(int availablePainters, int timeToPaint, int[] boards) {
-        int maxBoardTime = findSumOfAllBoardTime(boards);
-        int minBoardTime = findMaxTimeForSingleBoard(boards);
-        while (minBoardTime < maxBoardTime) {
-            int midBoardTime = (int) (minBoardTime + (maxBoardTime - minBoardTime)/2) % MODULO;
-            if (isFinishable(boards, midBoardTime, availablePainters)) { // check task is finishable with given painters
-                maxBoardTime = midBoardTime;
+        int maxBoard = findSumOfAllBoard(boards), minBoard = findMaxBoard(boards);
+        while (minBoard < maxBoard) {
+            int midBoard = (int) (minBoard + (maxBoard - minBoard)/2) % MODULO;
+            if (isFinishable(boards, midBoard, availablePainters)) { // check task is finishable with given painters
+                maxBoard = midBoard;
             } else {
-                minBoardTime = midBoardTime + 1;
+                minBoard = midBoard + 1;
             }
         }
 
-        long minimumTimeToPaint = (long) minBoardTime * timeToPaint;
+        long minimumTimeToPaint = (long) minBoard * timeToPaint;
         return (int) (minimumTimeToPaint % MODULO);
     }
 
@@ -64,7 +63,7 @@ public class PainterPartitionProblem {
         return true;
     }
 
-    private int findMaxTimeForSingleBoard(int[] boards) {
+    private int findMaxBoard(int[] boards) {
         int max = 0;
         for (int board : boards) {
             max = Math.max(max, board);
@@ -72,7 +71,7 @@ public class PainterPartitionProblem {
         return max;
     }
 
-    private int findSumOfAllBoardTime(int[] boards) {
+    private int findSumOfAllBoard(int[] boards) {
         int sum = 0;
         for (int board : boards) {
             sum += board;
